@@ -13,6 +13,8 @@ public class Sprite {
 	protected int spriteWidth, spriteHeight;
 	protected String spriteImage;
 	
+	protected int customSpeed = 75;
+	
 	protected boolean onLog = false;
 	
 	
@@ -35,6 +37,17 @@ public class Sprite {
 	public void setOnLog(boolean onLog) {
 		this.onLog = onLog;
 	}
+	
+	
+	
+	public int getCustomSpeed() {
+		return customSpeed;
+	}
+	
+	public void setCustomSpeed(int customSpeed) {
+		this.customSpeed = customSpeed;
+	}
+	
 	
 	
 	

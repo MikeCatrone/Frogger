@@ -16,17 +16,13 @@ public class Character2 extends Sprite implements Runnable {
 	
 	// for adjusting different speeds 
 	private int sleepTime = 200; // default delay
+	
+	
+	
+	// for direction
+	private boolean reverse = false;
+	
 
-	
-	public int getSleepTime() {
-	    return sleepTime;
-	}
-
-	public void setSleepTime(int sleepTime) {
-	    this.sleepTime = sleepTime;
-	}
-	
-	
 	
 	// Link to the JLabel from GamePrep
 	private JLabel character2Label;
@@ -42,12 +38,43 @@ public class Character2 extends Sprite implements Runnable {
 	private JLabel character1Label;
 	
 	
-	
-	
-	
 
-
+	
+	
 	// Getters and Setters for moving and visibility 
+	
+	
+	// speeds
+	public int getSleepTime() {
+	    return sleepTime;
+	}
+	
+	
+
+	public void setSleepTime(int sleepTime) {
+	    this.sleepTime = sleepTime;
+	}
+	
+	
+
+
+	// movement direction
+	public boolean getReverse() {
+		return reverse;
+	}
+
+
+
+	public void setReverse(boolean reverse) {
+		this.reverse = reverse;
+	}
+
+
+	
+
+	
+
+	// movement
 	public Boolean getMoving() {
 		return moving;
 	}
@@ -60,7 +87,7 @@ public class Character2 extends Sprite implements Runnable {
 
 
 
-
+	// visibility
 	public Boolean getVisible() {
 		return visible;
 	}
@@ -83,7 +110,7 @@ public class Character2 extends Sprite implements Runnable {
 	
 	
 	
-	// Show and hide methods for Tardis
+	// Show and hide methods for car 1
 	
 	public void hide() {
 		this.visible = false;
@@ -217,7 +244,6 @@ public class Character2 extends Sprite implements Runnable {
 		
 		
 		
-		// make character 1 red
 		this.character1.setSpriteImage("frogger1.png");
 		this.character1Label.setIcon(
 			new ImageIcon(getClass().getResource("images/" + this.character1.getSpriteImage()))
@@ -229,7 +255,7 @@ public class Character2 extends Sprite implements Runnable {
 		
 		
 		// start moving x coordinate. Keep moving until something sets moving to false
-		while(this.moving) {
+		while(this.moving && character1.getAlive() == true) {
 			
 			// movement routine //
 			
@@ -240,13 +266,23 @@ public class Character2 extends Sprite implements Runnable {
 			
 			
 			
-			// Step to the right(boundary loop)
 			
-			x += GameProperties.CHARACTER_STEP;
+			// For direction
+			if(this.getReverse() == true) {
+				x -= GameProperties.CHARACTER_STEP;
+				
+			} else {
+				x += GameProperties.CHARACTER_STEP;
+				
+			}
 			
+			
+			// For direction
 			if (x > GameProperties.SCREEN_WIDTH) {
 				x = -1 * this.spriteWidth;
 				
+			}else if (x + this.spriteWidth < 0) {
+			    x = GameProperties.SCREEN_WIDTH; // Wraps from left to right
 			}
 			
 			
@@ -310,7 +346,18 @@ public class Character2 extends Sprite implements Runnable {
 			if(this.getSpriteImage().contains("log")) {
 				
 				
-				int frogX = this.character1.getSpriteX() + GameProperties.CHARACTER_STEP;
+				int frogX;
+				
+				
+				// Takes into account for reverse movement
+				if (this.getReverse()) {
+	                frogX = this.character1.getSpriteX() - GameProperties.CHARACTER_STEP;
+	                
+	            } else {
+	                frogX = this.character1.getSpriteX() + GameProperties.CHARACTER_STEP;
+	            }
+				
+				
 	            
 	            // Update the frog's state and on-screen label location
 	            this.character1.setSpriteX(frogX);
@@ -323,19 +370,24 @@ public class Character2 extends Sprite implements Runnable {
 				
 				this.character1.setOnLog(false);
 				
-				// Make graphic for character2 red
+				// Change graphic when hit
 				this.setSpriteImage("car1.png");
 				this.character2Label.setIcon(
 						new ImageIcon(getClass().getResource("images/" + this.getSpriteImage()))
 				);
 				
+				
+				this.character1.setAlive(false);
+				
 				this.stopThread();
 				
-			
 				
+				System.out.println(startButton.getText());
 				
+
+							
 				
-				// Make graphic for character1 red
+				// Change graphic of frogger when hit (Optional)
 				this.character1.setSpriteImage("frogger1.png");
 				this.character1Label.setIcon(
 						new ImageIcon(getClass().getResource("images/" + this.character1.getSpriteImage()))
