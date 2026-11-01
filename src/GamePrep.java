@@ -664,6 +664,92 @@ public class GamePrep extends JFrame implements KeyListener, ActionListener{
 
 	
 	
+	
+	// Thread call function //
+	
+	public void threadControl(boolean isOn) {
+		if(isOn) {
+			
+			// Turn all cars on
+			
+			carRow1[0].startThread();
+			carRow1[1].startThread();
+			carRow1[2].startThread();
+			carRow1[3].startThread();
+			
+			carRow2[0].startThread();
+			carRow2[1].startThread();
+			carRow2[2].startThread();
+			carRow2[3].startThread();
+			
+			carRow3[0].startThread();
+			carRow3[1].startThread();
+			carRow3[2].startThread();
+			carRow3[3].startThread();
+			
+			
+			
+			logRow1[0].startThread();
+			logRow1[1].startThread();
+			logRow1[2].startThread();
+			logRow1[3].startThread();
+			
+			logRow2[0].startThread();
+			logRow2[1].startThread();
+			logRow2[2].startThread();
+			logRow2[3].startThread();
+			
+			logRow3[0].startThread();
+			logRow3[1].startThread();
+			logRow3[2].startThread();
+			logRow3[3].startThread();
+			
+			
+			
+		} else if(isOn == false) {
+			
+			// Turn all cars and logs off
+			
+			carRow1[0].stopThread();
+			carRow1[1].stopThread();
+			carRow1[2].stopThread();
+			carRow1[3].stopThread();
+			
+			carRow2[0].stopThread();
+			carRow2[1].stopThread();
+			carRow2[2].stopThread();
+			carRow2[3].stopThread();
+			
+			carRow3[0].stopThread();
+			carRow3[1].stopThread();
+			carRow3[2].stopThread();
+			carRow3[3].stopThread();
+			
+			
+			
+			logRow1[0].stopThread();
+			logRow1[1].stopThread();
+			logRow1[2].stopThread();
+			logRow1[3].stopThread();
+			
+			logRow2[0].stopThread();
+			logRow2[1].stopThread();
+			logRow2[2].stopThread();
+			logRow2[3].stopThread();
+			
+			logRow3[0].stopThread();
+			logRow3[1].stopThread();
+			logRow3[2].stopThread();
+			logRow3[3].stopThread();
+			
+			
+		}
+		
+	}
+	
+	
+	
+	
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// Not needed for this application
@@ -707,38 +793,17 @@ public class GamePrep extends JFrame implements KeyListener, ActionListener{
 			if(y < 200 && character1.getOnLog() == true) {
 				System.out.println("YOU WIN!");
 				
-				carRow1[0].setMoving(false);
-				carRow1[1].setMoving(false);
-				carRow1[2].setMoving(false);
-				carRow1[3].setMoving(false);
-
-				carRow2[0].setMoving(false);
-				carRow2[1].setMoving(false);
-				carRow2[2].setMoving(false);
-				carRow2[3].setMoving(false);
 				
-				carRow3[0].setMoving(false);
-				carRow3[1].setMoving(false);
-				carRow3[2].setMoving(false);
-				carRow3[3].setMoving(false);
+				// Add global score by 50 points.
+				GameProperties.SCORE += 50;
+				System.out.println(GameProperties.SCORE);
 				
 				
-				logRow1[0].setMoving(false);
-				logRow1[1].setMoving(false);
-				logRow1[2].setMoving(false);
-				logRow1[3].setMoving(false);
-				
-				logRow2[0].setMoving(false);
-				logRow2[1].setMoving(false);
-				logRow2[2].setMoving(false);
-				logRow2[3].setMoving(false);
-				
-				logRow3[0].setMoving(false);
-				logRow3[1].setMoving(false);
-				logRow3[2].setMoving(false);
-				logRow3[3].setMoving(false);
+				// Turn all cars and logs off if win
+				threadControl(false);
 				
 				
+				// Change sprite to winning frog sprite. Pressing start button will reset to default
 				this.character1.setSpriteImage("froggerWin.png");
 				this.character1Label.setIcon(
 						new ImageIcon(getClass().getResource("images/" + this.character1.getSpriteImage()))
@@ -747,21 +812,24 @@ public class GamePrep extends JFrame implements KeyListener, ActionListener{
 				
 			} else {
 				
-				System.out.println("You losee");
+				// Optional else logic
+				
 			}
 			
 			
-			System.out.println(character1.getSpriteY());
-			
 			
 		
-			// Checks is frog is in the water. The water's y value is between 440 and 60
+			// Checks if the frog is in the water when moving up
 			
 			if(character1.getSpriteY() < 440 && character1.getSpriteY() > 230 && character1.getOnLog() == false) {
 				System.out.println("Frog dead!");
 				
 				x=345;
 				y=920;
+				
+				GameProperties.SCORE -=50;
+				threadControl(false);
+				
 			
 			}
 			
@@ -782,12 +850,16 @@ public class GamePrep extends JFrame implements KeyListener, ActionListener{
 			System.out.println(character1.getSpriteY());
 			
 			
-			// Checks is frog is in the water. The water's y value is between 440 and 60
+			// Checks is frog is in the water when moving down
 			if(character1.getSpriteY() < 440 && character1.getSpriteY() > 230 && character1.getOnLog() == false) {
 				System.out.println("Frog dead");
 				
 				x=345;
 				y=920;
+				
+				
+				GameProperties.SCORE -=50;
+				threadControl(false);
 				
 				
 			} 
@@ -808,12 +880,15 @@ public class GamePrep extends JFrame implements KeyListener, ActionListener{
 			}
 			
 			
-			// Checks is frog is in the water. The water's y value is between 440 and 60
+			// Checks is frog is in the water when moving left
 			if(character1.getSpriteY() < 440 && character1.getSpriteY() > 230 && character1.getOnLog() == false) {
 				System.out.println("Frog dead");
 				
 				x=345;
 				y=920;
+				
+				GameProperties.SCORE -=50;
+				threadControl(false);
 				
 			}
 			
@@ -832,12 +907,15 @@ public class GamePrep extends JFrame implements KeyListener, ActionListener{
 			}
 			
 			
-			// Checks is frog is in the water. The water's y value is between 440 and 60
+			// Checks is frog is in the water when moving right
 			if(character1.getSpriteY() < 445 && character1.getSpriteY() > 230 && character1.getOnLog() == false) {
 				System.out.println("Frog dead");
 				
 				x=345;
 				y=920;
+				
+				GameProperties.SCORE -=50;
+				threadControl(false);
 				
 			}
 			
@@ -863,6 +941,8 @@ public class GamePrep extends JFrame implements KeyListener, ActionListener{
 		// move character graphic based on the new data
 		character1Label.setLocation(character1.getSpriteX(), character1.getSpriteY());
 		
+		
+		// Supposed to refresh the screen
 		content.repaint();
 		
 		
@@ -922,73 +1002,10 @@ public class GamePrep extends JFrame implements KeyListener, ActionListener{
 				character1Label.setLocation(345, 920);
 				
 				
+				// Threads needs to refresh - so I shut them all off then turn them on
+				threadControl(false);
 				
-				carRow1[0].stopThread();
-				carRow1[1].stopThread();
-				carRow1[2].stopThread();
-				carRow1[3].stopThread();
-				
-				carRow2[0].stopThread();
-				carRow2[1].stopThread();
-				carRow2[2].stopThread();
-				carRow2[3].stopThread();
-				
-				carRow3[0].stopThread();
-				carRow3[1].stopThread();
-				carRow3[2].stopThread();
-				carRow3[3].stopThread();
-				
-				
-				
-				logRow1[0].stopThread();
-				logRow1[1].stopThread();
-				logRow1[2].stopThread();
-				logRow1[3].stopThread();
-				
-				logRow2[0].stopThread();
-				logRow2[1].stopThread();
-				logRow2[2].stopThread();
-				logRow2[3].stopThread();
-				
-				logRow3[0].stopThread();
-				logRow3[1].stopThread();
-				logRow3[2].stopThread();
-				logRow3[3].stopThread();
-				
-				
-				
-				carRow1[0].startThread();
-				carRow1[1].startThread();
-				carRow1[2].startThread();
-				carRow1[3].startThread();
-				
-				carRow2[0].startThread();
-				carRow2[1].startThread();
-				carRow2[2].startThread();
-				carRow2[3].startThread();
-				
-				carRow3[0].startThread();
-				carRow3[1].startThread();
-				carRow3[2].startThread();
-				carRow3[3].startThread();
-				
-				
-				
-				logRow1[0].startThread();
-				logRow1[1].startThread();
-				logRow1[2].startThread();
-				logRow1[3].startThread();
-				
-				logRow2[0].startThread();
-				logRow2[1].startThread();
-				logRow2[2].startThread();
-				logRow2[3].startThread();
-				
-				logRow3[0].startThread();
-				logRow3[1].startThread();
-				logRow3[2].startThread();
-				logRow3[3].startThread();
-				
+				threadControl(true);
 				
 				
 				
@@ -997,36 +1014,8 @@ public class GamePrep extends JFrame implements KeyListener, ActionListener{
 				character1.setAlive(false);
 				
 				
-				carRow1[0].stopThread();
-				carRow1[1].stopThread();
-				carRow1[2].stopThread();
-				carRow1[3].stopThread();
-				
-				carRow2[0].stopThread();
-				carRow2[1].stopThread();
-				carRow2[2].stopThread();
-				carRow2[3].stopThread();
-				
-				carRow3[0].stopThread();
-				carRow3[1].stopThread();
-				carRow3[2].stopThread();
-				carRow3[3].stopThread();
-				
-				
-				logRow1[0].stopThread();
-				logRow1[1].stopThread();
-				logRow1[2].stopThread();
-				logRow1[3].stopThread();
-				
-				logRow2[0].stopThread();
-				logRow2[1].stopThread();
-				logRow2[2].stopThread();
-				logRow2[3].stopThread();
-				
-				logRow3[0].stopThread();
-				logRow3[1].stopThread();
-				logRow3[2].stopThread();
-				logRow3[3].stopThread();
+				// Turn off all cars and logs
+				threadControl(false);
 				
 				
 		

@@ -368,6 +368,14 @@ public class Character2 extends Sprite implements Runnable {
 				
 			} else {
 				
+				// Hit by a car
+				
+				
+				// If hit, subtract global score by 50 points.
+				GameProperties.SCORE -= 50;
+				System.out.println(GameProperties.SCORE);
+				
+				
 				this.character1.setOnLog(false);
 				
 				// Change graphic when hit
@@ -382,9 +390,7 @@ public class Character2 extends Sprite implements Runnable {
 				this.stopThread();
 				
 				
-				System.out.println(startButton.getText());
 				
-
 							
 				
 				// Change graphic of frogger when hit (Optional)
