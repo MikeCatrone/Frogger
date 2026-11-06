@@ -1,6 +1,7 @@
 
 
 
+
 public class GameProperties {
 	
 	public static final int SCREEN_WIDTH = 830;
@@ -9,5 +10,6 @@ public class GameProperties {
 	
 	public static int SCORE = 0;
 	public boolean gameWon = false;
+	public static String PLAYER_NAME = "";
 
 }
