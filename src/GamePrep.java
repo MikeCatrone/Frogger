@@ -1210,21 +1210,7 @@ public class GamePrep extends JFrame implements KeyListener, ActionListener{
 		if(e.getSource() == visibilityButton) {
 			
 			
-			if(carRow1[0].getVisible()) {
-				
-				carRow1[0].hide();
-				car1Label.setVisible(carRow1[0].getVisible());
-				visibilityButton.setText("SHOW");
-				
-			} else {
-				
-				carRow1[0].show();
-				car1Label.setVisible(carRow1[0].getVisible());
-				visibilityButton.setText("HIDE");
-				
-			}
-			
-			
+		System.out.println("Hide Button has been disabled for this demo");
 			
 			
 		// The Start Button	
