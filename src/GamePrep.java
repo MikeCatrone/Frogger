@@ -6,11 +6,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.sql.Connection;
+
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import java.awt.Color;
+
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 
 
@@ -19,6 +29,11 @@ import java.awt.Color;
 public class GamePrep extends JFrame implements KeyListener, ActionListener{
 	
 	
+	private static boolean nullable;
+
+	private static boolean idCheck = nullable; 
+	
+	private static int tempHighScore = 0;
 	
 	
 	// Character variables
@@ -228,7 +243,7 @@ public class GamePrep extends JFrame implements KeyListener, ActionListener{
 		// 5th
 		carRow2[0].setSpriteX(620); carRow2[0].setSpriteY(690);
 		carRow2[0].setSpriteWidth(50); carRow2[0].setSpriteHeight(50); 
-		carRow2[0].setSpriteImage("car1.png"); carRow2[0].setMoving(false); carRow2[0].setVisible(true); car5Label = new JLabel(); 
+		carRow2[0].setSpriteImage("car2.png"); carRow2[0].setMoving(false); carRow2[0].setVisible(true); car5Label = new JLabel(); 
 		car5Image = new ImageIcon(getClass().getResource("images/" + carRow2[0].getSpriteImage()));
 		car5Label.setIcon(car5Image); car5Label.setSize(carRow2[0].getSpriteWidth(), carRow2[0].getSpriteHeight());
 		car5Label.setLocation(carRow2[0].getSpriteX(), carRow2[0].getSpriteY());
@@ -241,7 +256,7 @@ public class GamePrep extends JFrame implements KeyListener, ActionListener{
 		// 6th
 		carRow2[1].setSpriteX(440); carRow2[1].setSpriteY(690);
 		carRow2[1].setSpriteWidth(50); carRow2[1].setSpriteHeight(50); 
-		carRow2[1].setSpriteImage("car1.png"); carRow2[1].setMoving(false); carRow2[1].setVisible(true); car6Label = new JLabel(); 
+		carRow2[1].setSpriteImage("car2.png"); carRow2[1].setMoving(false); carRow2[1].setVisible(true); car6Label = new JLabel(); 
 		car6Image = new ImageIcon(getClass().getResource("images/" + carRow2[1].getSpriteImage()));
 		car6Label.setIcon(car6Image); car6Label.setSize(carRow2[1].getSpriteWidth(), carRow2[1].getSpriteHeight());
 		car6Label.setLocation(carRow2[1].getSpriteX(), carRow2[1].getSpriteY());
@@ -254,7 +269,7 @@ public class GamePrep extends JFrame implements KeyListener, ActionListener{
 		// 7th
 		carRow2[2].setSpriteX(260); carRow2[2].setSpriteY(690);
 		carRow2[2].setSpriteWidth(50); carRow2[2].setSpriteHeight(50); 
-		carRow2[2].setSpriteImage("car1.png"); carRow2[2].setMoving(false); carRow2[2].setVisible(true); car7Label = new JLabel(); 
+		carRow2[2].setSpriteImage("car2.png"); carRow2[2].setMoving(false); carRow2[2].setVisible(true); car7Label = new JLabel(); 
 		car7Image = new ImageIcon(getClass().getResource("images/" + carRow2[2].getSpriteImage()));
 		car7Label.setIcon(car7Image); car7Label.setSize(carRow2[2].getSpriteWidth(), carRow2[2].getSpriteHeight());
 		car7Label.setLocation(carRow2[2].getSpriteX(), carRow2[2].getSpriteY());
@@ -267,7 +282,7 @@ public class GamePrep extends JFrame implements KeyListener, ActionListener{
 		// 8th
 		carRow2[3].setSpriteX(60); carRow2[3].setSpriteY(690);
 		carRow2[3].setSpriteWidth(50); carRow2[3].setSpriteHeight(50); 
-		carRow2[3].setSpriteImage("car1.png"); carRow2[3].setMoving(false); carRow2[3].setVisible(true); car8Label = new JLabel(); 
+		carRow2[3].setSpriteImage("car2.png"); carRow2[3].setMoving(false); carRow2[3].setVisible(true); car8Label = new JLabel(); 
 		car8Image = new ImageIcon(getClass().getResource("images/" + carRow2[3].getSpriteImage()));
 		car8Label.setIcon(car8Image); car8Label.setSize(carRow2[3].getSpriteWidth(), carRow2[3].getSpriteHeight());
 		car8Label.setLocation(carRow2[3].getSpriteX(), carRow2[3].getSpriteY());
@@ -749,6 +764,49 @@ public class GamePrep extends JFrame implements KeyListener, ActionListener{
 	
 	
 	
+	// Display SQL Records //
+	
+	public static String[] DisplayRecords(ResultSet rs) throws SQLException {
+		
+        while (rs.next()) {
+        	
+            int id = rs.getInt("id");
+            String name = rs.getString("name");
+            int score = rs.getInt("score");
+            
+            
+            System.out.println("/////////////////////////" + "\n");
+            System.out.println("ID: " + id);
+            System.out.println("Name: " + name);
+            System.out.println("Score: " + score);
+            
+            idCheck = true;
+            
+            tempHighScore = score;
+            
+            if(id == 1) {
+            	
+            	// Just for testing
+            	
+            	String strID = Integer.toString(id);
+            	String strScore = Integer.toString(score);
+            	
+            	String[] currentPlayer = {strID, name, strScore};
+            	
+            	return currentPlayer;
+            	
+         
+            	
+            }
+            
+           
+        }
+        
+		return null;
+    }
+	
+	
+	
 	
 	@Override
 	public void keyTyped(KeyEvent e) {
@@ -789,7 +847,8 @@ public class GamePrep extends JFrame implements KeyListener, ActionListener{
 			}
 			
 			
-			// Win Logic
+			// Win Logic //
+			
 			if(y < 200 && character1.getOnLog() == true) {
 				System.out.println("YOU WIN!");
 				
@@ -801,6 +860,7 @@ public class GamePrep extends JFrame implements KeyListener, ActionListener{
 				
 				// Turn all cars and logs off if win
 				threadControl(false);
+			
 				
 				
 				// Change sprite to winning frog sprite. Pressing start button will reset to default
@@ -808,7 +868,190 @@ public class GamePrep extends JFrame implements KeyListener, ActionListener{
 				this.character1Label.setIcon(
 						new ImageIcon(getClass().getResource("images/" + this.character1.getSpriteImage()))
 				);
+				
+				
+				// Force Swing to prioritize updating the screen right now
+				this.character1Label.paintImmediately(this.character1Label.getVisibleRect());
+				
+				
+				SwingUtilities.invokeLater(new Runnable() {
 					
+				    @Override
+				    public void run() {
+				        String playerName = JOptionPane.showInputDialog("You won! Enter a name for scorekeeping");
+				        if (playerName != null && !playerName.trim().isEmpty()) {
+				            
+				            
+				            GameProperties.PLAYER_NAME = playerName;
+				            
+				            
+				            
+				            
+				         // Database Access for Winning ///////////////////////////////////////////////////////////////////////////////
+							
+							Connection conn = null;
+							Statement stmt = null;
+							
+							
+							
+							try {
+								
+								// Load a database driver
+								
+								Class.forName("org.sqlite.JDBC");
+								System.out.println("Driver Loaded");
+								
+								// Create a connection string and connect to the database
+								String dbURL = "jdbc:sqlite:players2.db";
+								conn = DriverManager.getConnection(dbURL);
+								
+								
+								
+								if( conn != null) {
+									
+									System.out.println("Connection Successfully!");
+									
+									
+									
+									
+									// Execute SQL statements
+					                
+					                //create table using prepared statement
+					                String sqlCreateTable = "CREATE TABLE IF NOT EXISTS PLAYERS2 " +
+					                                        "(ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+					                                        " NAME TEXT NOT NULL, " +
+					                                        " SCORE INT NOT NULL) " ;
+					                                        
+					                
+					                
+					                System.out.println("sqlCreateTable: " + sqlCreateTable);
+					                
+					                try (PreparedStatement pstmtCreateTable = conn.prepareStatement(sqlCreateTable)) {
+					                    pstmtCreateTable.executeUpdate();
+					                    System.out.println("Table Successfully Created");
+					                }
+					                
+					                
+					                
+					     
+					               
+					              //Selecting the first entry
+					                String sqlSelect = "SELECT * FROM PLAYERS2 WHERE id = 1";
+
+					                try (PreparedStatement pstmtSelect = conn.prepareStatement(sqlSelect)) {
+					                    ResultSet rs = pstmtSelect.executeQuery();
+					                    
+					                    // Process results
+					                    DisplayRecords(rs);
+					                    
+					                    System.out.println("The final result is: " + idCheck);
+					                    
+					                    
+					                    
+					                    if(idCheck == false) {
+					                    	
+					                 
+					                        // INSERT data when there are 0 records
+							                
+							                String sqlInsert = "INSERT INTO PLAYERS2 (NAME, SCORE) VALUES (?, ?)";
+							                try (PreparedStatement pstmtInsert = conn.prepareStatement(sqlInsert)) {
+							                	
+							                    pstmtInsert.setString(1, GameProperties.PLAYER_NAME);
+							                    pstmtInsert.setInt(2, GameProperties.SCORE);
+							                    pstmtInsert.executeUpdate();
+							 
+							                    
+							                }
+					                    	
+					                    } else {
+					                    	
+					                    	// UPDATE instead
+					                    	
+					                    	
+					                    	// If the database score is higher than the current game score
+					                    	if(tempHighScore < GameProperties.SCORE) {
+					                    		tempHighScore = GameProperties.SCORE;
+					                    	}
+					                    	
+					                    	
+					                        String sqlUpdate = "UPDATE PLAYERS2 SET NAME = ?, SCORE = ? WHERE id = ?;";
+
+							                try (PreparedStatement pstmtUpdate = conn.prepareStatement(sqlUpdate)) {
+							                	
+							                    // 2. Set the Name (String) as the first parameter
+							                    pstmtUpdate.setString(1, GameProperties.PLAYER_NAME);
+							                    
+							                    // 3. Set the Score (Double or Int depending on your table) as the second parameter
+							                    pstmtUpdate.setDouble(2, tempHighScore);
+							                    
+							                    // 4. Set the ID (Int) as the third parameter for the WHERE clause
+							                    pstmtUpdate.setInt(3, 1);
+							                    
+							                    // 5. Execute the update
+							                    pstmtUpdate.executeUpdate();
+							                }  
+							                
+					                    	
+					                    }
+					                    
+					                 
+					                    rs.close();
+					                }
+					                
+					                
+					       
+					                
+			              
+					              
+									// Close connection
+									conn.close();
+									
+								}
+								
+								
+								
+								
+								
+								
+							} catch(Exception e1) {
+								e1.printStackTrace();
+								
+							} finally {
+								
+								//cleanup code
+								// if(conn != null) conn.close();
+								
+							}
+							
+							
+							
+							
+							
+							//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				            
+				            
+				            
+				            
+				            
+				        } else {
+				            JOptionPane.showMessageDialog(null, "No name was entered.");
+				            
+				        }
+				        
+				        
+				        // Final Message
+				        
+				        JOptionPane.showMessageDialog(null, "Great job, " + GameProperties.PLAYER_NAME + "! Current Score: " + GameProperties.SCORE + " High Score: " + tempHighScore);
+				        
+				    }
+				    
+				});
+				
+				
+				
+				
+				
+		
 				
 			} else {
 				
@@ -1006,6 +1249,10 @@ public class GamePrep extends JFrame implements KeyListener, ActionListener{
 				threadControl(false);
 				
 				threadControl(true);
+				
+				
+				
+				
 				
 				
 				
