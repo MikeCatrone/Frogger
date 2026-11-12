@@ -1241,7 +1241,7 @@ public class GamePrep extends JFrame implements KeyListener, ActionListener{
 				
 				
 				
-				
+				//test
 			} else if(startButton.getText().equals("STOP")) {
 						
 				character1.setAlive(false);
